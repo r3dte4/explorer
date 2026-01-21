@@ -1,2 +1,2 @@
 # Hi
-## just `npm install` and `npm start` and congra
+## just `npm start` and congra
