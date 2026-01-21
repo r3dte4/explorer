@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Storage Explorer</title>
+
+  <!-- Prism for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="app" class="app">
+    <header class="topbar glass">
+      <div class="left">
+        <div class="title">Storage Explorer</div>
+        <div id="rootBadge" class="badge"></div>
+      </div>
+
+      <div class="center">
+        <input id="globalSearch" class="search" placeholder="Search (name/path/tag:#archive/ext:pdf/desc:\"
+          text\"/size:>500MB)" />
+      </div>
+
+      <div class="right">
+        <button id="refreshBtn" class="btn">Refresh</button>
+        <button id="themeBtn" class="btn">Theme</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <aside class="sidebar glass">
+        <div class="sidebarHeader">
+          <div class="sidebarTitle">Explorer</div>
+          <div class="sidebarActions">
+            <button id="selectAllBtn" class="btn btnSmall">All</button>
+            <button id="selectNoneBtn" class="btn btnSmall">None</button>
+            <button id="invertBtn" class="btn btnSmall">Invert</button>
+          </div>
+        </div>
+
+        <div id="tree" class="tree"></div>
+      </aside>
+
+      <main class="main glass">
+        <div class="crumbbar">
+          <div id="breadcrumbs" class="breadcrumbs"></div>
+          <button id="copyPathBtn" class="btn btnSmall">Copy path</button>
+        </div>
+
+        <div class="listHeader">
+          <div class="col colCheck"></div>
+          <div class="col colName sort" data-sort="name">Name</div>
+          <div class="col colSize sort" data-sort="size">Size</div>
+          <div class="col colMod sort" data-sort="mtime">Modified</div>
+        </div>
+
+        <div id="viewControls" class="viewControls">
+          <div class="controlGroup">
+            <label class="controlLabel">View:</label>
+            <button id="viewFoldersBtn" class="btn btnSmall active" data-view="folders">Folders</button>
+            <button id="viewTimelineBtn" class="btn btnSmall" data-view="timeline">All Files</button>
+          </div>
+          <div id="timelineControls" class="controlGroup timelineControls" style="display:none;">
+            <label class="controlLabel">Sort by:</label>
+            <select id="sortBySelect" class="select">
+              <option value="modified">Modified</option>
+              <option value="created">Created</option>
+            </select>
+            <label class="controlLabel">Group:</label>
+            <select id="groupBySelect" class="select">
+              <option value="day">Day</option>
+              <option value="month">Month</option>
+            </select>
+            <div class="navButtons">
+              <button id="prevGroupsBtn" class="btn btnSmall" disabled>← Prev</button>
+              <span id="groupsInfo" class="groupsInfo">0 of 0</span>
+              <button id="nextGroupsBtn" class="btn btnSmall" disabled>Next →</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="list" class="list"></div>
+
+        <div class="previewArea">
+          <div class="tabs" id="tabs"></div>
+          <div class="preview" id="preview"></div>
+        </div>
+      </main>
+
+      <aside class="inspector glass">
+        <div class="inspectorHeader">
+          <div class="inspectorTitle">Inspector</div>
+          <div id="bulkBadge" class="badge subtle" style="display:none;">Bulk</div>
+        </div>
+
+        <div id="inspectorBody" class="inspectorBody">
+          <div class="muted">Click a file/folder to edit description and tags.</div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="actionBar" class="actionBar glass" style="display:none;">
+      <div class="actionLeft">
+        <div id="selCount">0 selected</div>
+        <div id="selSize" class="muted"></div>
+      </div>
+      <div class="actionRight">
+        <button id="archiveBtn" class="btn danger">Archive</button>
+        <button id="moveBtn" class="btn danger">Move</button>
+        <button id="deleteBtn" class="btn danger">Delete</button>
+      </div>
+    </div>
+
+    <footer class="statusbar glass">
+      <div id="statusLeft"></div>
+      <div id="statusRight" class="muted"></div>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" style="display:none;">
+    <div class="modalCard glass">
+      <div class="modalTitle" id="modalTitle"></div>
+      <div class="modalBody" id="modalBody"></div>
+      <div class="modalActions">
+        <button id="modalCancel" class="btn">Cancel</button>
+        <button id="modalOk" class="btn danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

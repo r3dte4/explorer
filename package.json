@@ -1,0 +1,16 @@
+{
+  "name": "storage-explorer",
+  "version": "1.0.0",
+  "description": "Local Windows Storage Explorer (C:\\Users\\[USERNAME]) with safe previews, tags, and descriptions",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mime-types": "^2.1.35",
+    "sharp": "^0.33.5"
+  }
+}
